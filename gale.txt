@@ -1,0 +1,66 @@
+import java.util.*;
+public class GaleShapley {
+    static int[] stableMatching(int[][] menPref, int[][] womenPref, int n) {
+        int[] womenPartner = new int[n];
+        Arrays.fill(womenPartner, -1);
+        boolean[] menFree = new boolean[n];
+        Arrays.fill(menFree, true);
+        int[] nextProposal = new int[n];
+        while (true) {
+            int m = -1;
+            for (int i = 0; i < n; i++) {
+                if (menFree[i]) {
+                    m = i;
+                    break;
+                }
+            }
+            if (m == -1) break;
+            int w = menPref[m][nextProposal[m]];
+            nextProposal[m]++;
+            if (womenPartner[w] == -1) {
+                womenPartner[w] = m;
+                menFree[m] = false;
+            }
+            else {
+                int currentPartner = womenPartner[w];
+                if (prefers(womenPref[w], m, currentPartner)) {
+                    womenPartner[w] = m;
+                    menFree[currentPartner] = true;
+                    menFree[m] = false;
+                }
+            }
+        }
+        return womenPartner;
+    }
+    static boolean prefers(int[] pref, int m, int currentPartner) {
+        for (int x : pref) {
+            if (x == m) return true;
+            if (x == currentPartner) return false;
+        }
+        return false;
+    }
+    public static void main(String[] args) {
+        Scanner in = new Scanner(System.in);
+        System.out.println("Enter the number of pairs 'n':");
+        int n = in.nextInt();
+        int[][] menPref = new int[n][n];
+        int[][] womenPref = new int[n][n];
+        System.out.println("Enter men's preferences:");
+        for (int i = 0; i < n; i++) {
+            for (int j = 0; j < n; j++) {
+                menPref[i][j] = in.nextInt();
+            }
+        }
+        System.out.println("Enter women's preferences:");
+        for (int i = 0; i < n; i++) {
+            for (int j = 0; j < n; j++) {
+                womenPref[i][j] = in.nextInt();
+            }
+        }
+        int[] result = stableMatching(menPref, womenPref, n);
+        System.out.println("Stable matching:");
+        for (int i = 0; i < n; i++) {
+            System.out.println("Woman " + i + " is matched with Man " + result[i]);
+        }
+    }
+}
