@@ -1,13 +1,17 @@
 import java.util.*;
 public class SubsetSum {
-    static boolean subsetSum(int[] arr, int n, int target,int index, int currentSum) {
+    static boolean subsetSum(int[] arr, int n, int target, int index, int currentSum) {
         if (currentSum == target)
             return true;
         if (index == n || currentSum > target)
             return false;
-        if (subsetSum(arr, n, target,index + 1, currentSum + arr[index]))
+        if (subsetSum(arr, n, target,
+                index + 1,
+                currentSum + arr[index]))
             return true;
-        if (subsetSum(arr, n, target,index + 1, currentSum))
+        if (subsetSum(arr, n, target,
+                index + 1,
+                currentSum))
             return true;
         return false;
     }
@@ -27,5 +31,6 @@ public class SubsetSum {
             System.out.println("Subset with given sum exists");
         else
             System.out.println("Subset with given sum does not exist");
+        sc.close();
     }
 }
