@@ -1,59 +1,54 @@
 import java.util.*;
-public class BellmanFord {
-    static class Edge {
-        int u, v, w;
-        Edge(int u, int v, int w) {
+
+public class bellmanford {
+    static class Edge{
+        int u,v,w;
+        Edge(int u, int v, int w){
             this.u = u;
             this.v = v;
             this.w = w;
         }
     }
-    static void bellmanFord(int V, List<Edge> edges, int source) {
+    static void bellmanFord(int V, List<Edge> edges, int source){
         int[] dist = new int[V];
-        Arrays.fill(dist, Integer.MAX_VALUE);
+        Arrays.fill(dist,Integer.MAX_VALUE);
         dist[source] = 0;
-        // relax all edges V-1 times
-        for (int i = 1; i <= V - 1; i++) {
-            for (Edge e : edges) {
-                int u = e.u;
-                int v = e.v;
-                int w = e.w;
-                if (dist[u] != Integer.MAX_VALUE && dist[u] + w < dist[v]) {
-                    dist[v] = dist[u] + w;
+        int cnt = 0;
+        while(cnt<V-1){
+            for(Edge e: edges){
+                if(dist[e.u]!= Integer.MAX_VALUE && dist[e.u]+e.w<dist[e.v]){
+                    dist[e.v] = dist[e.u] + e.w;
                 }
             }
+            cnt++;
         }
-        // check negative cycle
-        for (Edge e : edges) {
-            int u = e.u;
-            int v = e.v;
-            int w = e.w;
-            if (dist[u] != Integer.MAX_VALUE && dist[u] + w < dist[v]) {
+        for(Edge e: edges){
+            if(dist[e.u] != Integer.MAX_VALUE && dist[e.u] + e.w < dist[e.v]){
                 System.out.println("Negative weight cycle detected");
                 return;
             }
         }
-        System.out.println("Shortest distances:");
-        for (int i = 0; i < V; i++) {
+        System.out.println("Shortest Distances:");
+        for (int i = 0; i < V; i++)
             System.out.println(source + " -> " + i + " = " + dist[i]);
-        }
     }
     public static void main(String[] args) {
         Scanner sc = new Scanner(System.in);
-        System.out.println("Enter number of vertices:");
+        System.out.println("Enter number of vertices: ");
         int V = sc.nextInt();
-        System.out.println("Enter number of edges:");
+        System.out.println("Enter number of edges: ");
         int E = sc.nextInt();
         List<Edge> edges = new ArrayList<>();
-        System.out.println("Enter edges (u v weight):");
-        for (int i = 0; i < E; i++) {
+        System.out.println("Enter edges (u,v,w): ");
+        for(int i=0;i<E;i++){
             int u = sc.nextInt();
             int v = sc.nextInt();
             int w = sc.nextInt();
-            edges.add(new Edge(u, v, w));
+            edges.add(new Edge(u,v,w));
         }
         System.out.println("Enter source vertex:");
         int source = sc.nextInt();
         bellmanFord(V, edges, source);
+        sc.close();
     }
 }
