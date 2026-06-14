@@ -1,25 +1,27 @@
 import java.util.*;
-public class Prims {
-    static class Edge {
+
+public class prims {
+    static class Edge{
         int v, w;
         Edge(int v, int w) {
             this.v = v;
             this.w = w;
         }
     }
-    static void prims(ArrayList<ArrayList<Edge>> adj, int V) {
+    static void prims(ArrayList<ArrayList<Edge>> adj, int V){
         boolean[] visited = new boolean[V];
         visited[0] = true;
         int edges = 0;
-        System.out.println("Edges in MST:");
-        while (edges < V - 1) {
+        int totalCost = 0;
+        System.out.println("Edges in MST: ");
+        while(edges<V-1){
             int min = Integer.MAX_VALUE;
             int u = -1;
             int v = -1;
-            for (int i = 0; i < V; i++) {
-                if (visited[i]) {
-                    for (Edge edge : adj.get(i)) {
-                        if (!visited[edge.v] && edge.w < min) {
+            for(int i=0;i<V;i++){
+                if(visited[i]){
+                    for(Edge edge: adj.get(i)){
+                        if(!visited[edge.v] && edge.w < min){
                             min = edge.w;
                             u = i;
                             v = edge.v;
@@ -27,11 +29,12 @@ public class Prims {
                     }
                 }
             }
-
-            System.out.println(u + " - " + v + " : " + min);
+            System.out.println(u+ " - "+ v + " : " + min);
+            totalCost += min;
             visited[v] = true;
             edges++;
         }
+        System.out.println("Minimum Cost: " + totalCost);
     }
     public static void main(String[] args) {
         Scanner sc = new Scanner(System.in);
@@ -40,17 +43,20 @@ public class Prims {
         System.out.println("Enter number of edges:");
         int E = sc.nextInt();
         ArrayList<ArrayList<Edge>> adj = new ArrayList<>();
-        for (int i = 0; i < V; i++) {
+        for (int i = 0; i < V; i++)
             adj.add(new ArrayList<>());
-        }
         System.out.println("Enter edges (u v weight):");
-        for (int i = 0; i < E; i++) {
+        for(int i=0;i<E;i++){
             int u = sc.nextInt();
             int v = sc.nextInt();
             int w = sc.nextInt();
             adj.get(u).add(new Edge(v, w));
             adj.get(v).add(new Edge(u, w));
         }
+        long start = System.nanoTime();
         prims(adj, V);
+        long end = System.nanoTime();
+        System.out.println("Execution Time: " + (end - start) + " ns");
+        sc.close();
     }
 }
