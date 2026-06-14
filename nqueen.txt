@@ -1,59 +1,55 @@
 import java.util.*;
 
-public class NQueens {
-    static boolean isSafe(char[][] board, int row, int col, int n) {
-        for (int i = 0; i < row; i++) {
-            if (board[i][col] == 'Q')
-                return false;
-        }
-        for (int i = row - 1, j = col - 1;
-             i >= 0 && j >= 0;
-             i--, j--) {
-
-            if (board[i][j] == 'Q')
-                return false;
-        }
-        for (int i = row - 1, j = col + 1;
-             i >= 0 && j < n;
-             i--, j++) {
-
-            if (board[i][j] == 'Q')
-                return false;
-        }
-        return true;
-    }
-    static boolean solve(char[][] board, int row, int n) {
-        if (row == n)
-            return true;
-        for (int col = 0; col < n; col++) {
-            if (isSafe(board, row, col, n)) {
-                board[row][col] = 'Q';
-                if (solve(board, row + 1, n))
-                    return true;
-                board[row][col] = '.';
-            }
-        }
-        return false;
-    }
-    public static void main(String[] args) {
-        Scanner sc = new Scanner(System.in);
-        System.out.println("Enter value of N:");
-        int n = sc.nextInt();
-        char[][] board = new char[n][n];
-        for (int i = 0; i < n; i++) {
-            Arrays.fill(board[i], '.');
-        }
-        if (solve(board, 0, n)) {
-            System.out.println("Solution:");
+public class nqueens {
+    static void nQueens(int[][] board, int row, int n) {
+        if (row == n) {
+            System.out.println("Valid Arrangement:");
             for (int i = 0; i < n; i++) {
                 for (int j = 0; j < n; j++) {
                     System.out.print(board[i][j] + " ");
                 }
                 System.out.println();
             }
+            System.out.println();
+            return;
         }
-        else {
-            System.out.println("No solution exists");
+        for (int col = 0; col < n; col++) {
+            boolean safe = true;
+            for (int i = 0; i < row; i++) {
+                if (board[i][col] == 1) {
+                    safe = false;
+                    break;
+                }
+            }
+            for (int i = row - 1, j = col - 1; i >= 0 && j >= 0;  i--, j--) {
+                if (board[i][j] == 1) {
+                    safe = false;
+                    break;
+                }
+            }
+            for (int i = row - 1, j = col + 1;  i >= 0 && j < n; i--, j++) {
+                if (board[i][j] == 1) {
+                    safe = false;
+                    break;
+                }
+            }
+            if (safe) {
+                board[row][col] = 1;
+                nQueens(board, row + 1, n);
+                board[row][col] = 0;
+            }
         }
+    }
+
+    public static void main(String[] args) {
+        Scanner in = new Scanner(System.in);
+        System.out.print("Enter the value of N: ");
+        int n = in.nextInt();
+        int[][] board = new int[n][n];
+        long start = System.nanoTime();
+        nQueens(board, 0, n);
+        long end = System.nanoTime();
+        System.out.println("Execution Time: " + (end - start) + " ns");
+        in.close();
     }
 }
