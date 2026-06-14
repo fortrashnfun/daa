@@ -1,0 +1,55 @@
+import java.util.*;
+
+public class tsp {
+    static int n;
+    static int minCost = Integer.MAX_VALUE;
+    static int[][] costMatrix;
+    static boolean[] visited;
+    static int[] bestPath;
+
+    static void tsp(int current, int count, int currentCost, int[] path) {
+        if (count == n) {
+            int totalCost = currentCost + costMatrix[current][0];
+            if (totalCost < minCost) {
+                minCost = totalCost;
+                for (int i = 0; i < n; i++)
+                    bestPath[i] = path[i];
+            }
+            return;
+        }
+        for (int i = 0; i < n; i++) {
+            if (!visited[i] && costMatrix[current][i] != 0) {
+                if (currentCost + costMatrix[current][i] >= minCost)
+                    continue;
+                visited[i] = true;
+                path[count] = i;
+                tsp(i, count + 1, currentCost + costMatrix[current][i], path);
+                visited[i] = false;
+            }
+        }
+    }
+
+    public static void main(String[] args) {
+        Scanner in = new Scanner(System.in);
+        System.out.println("Enter the number of cities:");
+        n = in.nextInt();
+        costMatrix = new int[n][n];
+        System.out.println("Enter the cost matrix:");
+        for (int i = 0; i < n; i++)
+            for (int j = 0; j < n; j++)
+                costMatrix[i][j] = in.nextInt();
+        visited = new boolean[n];
+        bestPath = new int[n];
+        int[] path = new int[n];
+        visited[0] = true;
+        path[0] = 0;
+        tsp(0, 1, 0, path);
+
+        System.out.println("Optimal Tour:");
+        for (int city : bestPath)
+            System.out.print((city + 1) + " -> ");
+        System.out.println(bestPath[0] + 1);
+        System.out.println("Minimum Cost: " + minCost);
+        in.close();
+    }
+}
