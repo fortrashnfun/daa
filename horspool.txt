@@ -1,37 +1,35 @@
 import java.util.*;
-public class Horspool {
-    static int horspool(String text, String pattern) {
+
+public class horspool {
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+        System.out.println("Enter Text: ");
+        String text = sc.nextLine();
+        System.out.println("Enter Pattern: ");
+        String pattern = sc.nextLine();
+
+        int pos = horspool(text,pattern);
+        if(pos==-1) System.out.println("Pattern not found");
+        else System.out.println("Pattern found at index " + pos);
+        sc.close();
+    }
+    static int horspool(String text, String pattern){
         int m = pattern.length();
         int n = text.length();
         int[] shift = new int[256];
-        Arrays.fill(shift, m);
-        for (int i = 0; i < m - 1; i++) {
+        Arrays.fill(shift,m);
+        for(int i=0;i<m-1;i++){
             shift[pattern.charAt(i)] = m - 1 - i;
         }
-        int i = m - 1;
-        while (i < n) {
+        int i = m-1;
+        while(i<n){
             int k = 0;
-            while (k < m &&
-                   pattern.charAt(m - 1 - k) == text.charAt(i - k)) {
+            while(k < m && pattern.charAt(m - 1 - k) == text.charAt(i - k)){
                 k++;
             }
-            if (k == m) {
-                return i - m + 1;
-            }
-            i = i + shift[text.charAt(i)];
+            if(k==m) return i-m+1;
+            i = i+shift[text.charAt(i)];
         }
         return -1;
-    }
-    public static void main(String[] args) {
-        Scanner sc = new Scanner(System.in);
-        System.out.println("Enter text:");
-        String text = sc.nextLine();
-        System.out.println("Enter pattern:");
-        String pattern = sc.nextLine();
-        int pos = horspool(text, pattern);
-        if (pos == -1)
-            System.out.println("Pattern not found");
-        else
-            System.out.println("Pattern found at index " + pos);
     }
 }
