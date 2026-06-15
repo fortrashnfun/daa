@@ -1,37 +1,41 @@
 import java.util.*;
-public class Knapsack {
-    static int knapsack(int[] wt, int[] val, int n, int W) {
-        int[][] dp = new int[n + 1][W + 1];
-        for (int i = 1; i <= n; i++) {
-            for (int w = 1; w <= W; w++) {
-                if (wt[i - 1] <= w) {
-                    int include = val[i - 1] + dp[i - 1][w - wt[i - 1]];
-                    int exclude = dp[i - 1][w];
-                    dp[i][w] =  Math.max(include, exclude);
+
+public class knapsack {
+    static int knapsack(int[] wt, int[] val, int n, int W){
+        int[][] dp = new int[n+1][W+1];
+        for(int i=1;i<=n;i++){
+            for(int w=1;w<=W;w++){
+                if(wt[i-1]<=w){
+                    int include = val[i-1]+dp[i-1][w-wt[i-1]];
+                    int exclude = dp[i-1][w];
+                    dp[i][w] = Math.max(include,exclude);
                 }
-                else
-                    dp[i][w] = dp[i - 1][w];
+                else{
+                    dp[i][w] = dp[i-1][w];
+                }
             }
         }
         return dp[n][W];
     }
     public static void main(String[] args) {
         Scanner sc = new Scanner(System.in);
-        System.out.println("Enter number of items:");
+        System.out.println("Enter no. of items: ");
         int n = sc.nextInt();
         int[] wt = new int[n];
         int[] val = new int[n];
         System.out.println("Enter weights:");
-        for (int i = 0; i < n; i++) {
+        for (int i = 0; i < n; i++)
             wt[i] = sc.nextInt();
-        }
         System.out.println("Enter values:");
-        for (int i = 0; i < n; i++) {
-            val[i] = sc.nextInt();
-        }
+        for (int i = 0; i < n; i++)
+            val[i] = sc.nextInt(); 
         System.out.println("Enter knapsack capacity:");
         int W = sc.nextInt();
+        long start = System.nanoTime();
         int ans = knapsack(wt, val, n, W);
-        System.out.println("Maximum profit = " + ans);
+        long end = System.nanoTime();
+        System.out.println("Maximum Profit = " + ans);
+        System.out.println("Execution Time: " + (end - start) + " ns");
+        sc.close();
     }
 }
